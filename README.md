@@ -47,16 +47,143 @@ flutter run
 
 ## 프로젝트 구조
 
-\`\`\`
-lib/
-├── core/           # 핵심 유틸리티 및 서비스
-├── features/       # 기능별 모듈 (Clean Architecture)
-├── shared/         # 공통 위젯 및 유틸리티
-└── main.dart       # 앱 진입점
-\`\`\`
+```
+medirelay_flutter/
+├── 📄 pubspec.yaml
+├── 📄 analysis_options.yaml
+├── 📁 assets/
+│   ├── 📁 images/
+│   │   ├── medirelay_logo.svg
+│   │   └── splash_logo.png
+│   ├── 📁 icons/
+│   ├── 📁 animations/
+│   │   └── loading.json
+│   ├── 📁 audio/
+│   └── 📁 fonts/
+│       └── Pretendard/
+├── 📁 lib/
+│   ├── 📄 main.dart
+│   ├── 📁 core/
+│   │   ├── 📁 constants/
+│   │   │   ├── app_constants.dart
+│   │   │   ├── api_constants.dart
+│   │   │   └── asset_constants.dart
+│   │   ├── 📁 errors/
+│   │   │   ├── exceptions.dart
+│   │   │   └── failures.dart
+│   │   ├── 📁 network/
+│   │   │   ├── dio_client.dart
+│   │   │   └── network_info.dart
+│   │   ├── 📁 utils/
+│   │   │   ├── logger.dart
+│   │   │   ├── validators.dart
+│   │   │   └── date_utils.dart
+│   │   ├── 📁 theme/
+│   │   │   ├── app_theme.dart
+│   │   │   ├── app_colors.dart
+│   │   │   ├── app_text_styles.dart
+│   │   │   └── app_decorations.dart
+│   │   └── 📁 services/
+│   │       ├── storage_service.dart
+│   │       ├── permission_service.dart
+│   │       └── notification_service.dart
+│   ├── 📁 features/
+│   │   ├── 📁 auth/
+│   │   │   ├── 📁 data/
+│   │   │   │   ├── 📁 datasources/
+│   │   │   │   │   ├── auth_local_datasource.dart
+│   │   │   │   │   └── auth_remote_datasource.dart
+│   │   │   │   ├── 📁 models/
+│   │   │   │   │   ├── user_model.dart
+│   │   │   │   │   └── login_request_model.dart
+│   │   │   │   └── 📁 repositories/
+│   │   │   │       └── auth_repository_impl.dart
+│   │   │   ├── 📁 domain/
+│   │   │   │   ├── 📁 entities/
+│   │   │   │   │   └── user.dart
+│   │   │   │   ├── 📁 repositories/
+│   │   │   │   │   └── auth_repository.dart
+│   │   │   │   └── 📁 usecases/
+│   │   │   │       ├── login_usecase.dart
+│   │   │   │       └── logout_usecase.dart
+│   │   │   └── 📁 presentation/
+│   │   │       ├── 📁 bloc/
+│   │   │       │   ├── auth_bloc.dart
+│   │   │       │   ├── auth_event.dart
+│   │   │       │   └── auth_state.dart
+│   │   │       ├── 📁 pages/
+│   │   │       │   ├── landing_page.dart
+│   │   │       │   └── login_page.dart
+│   │   │       └── 📁 widgets/
+│   │   │           ├── login_form.dart
+│   │   │           └── demo_account_selector.dart
+│   │   ├── 📁 patients/
+│   │   │   ├── 📁 data/
+│   │   │   ├── 📁 domain/
+│   │   │   └── 📁 presentation/
+│   │   ├── 📁 voice_recording/
+│   │   │   ├── 📁 data/
+│   │   │   │   ├── 📁 datasources/
+│   │   │   │   │   ├── voice_local_datasource.dart
+│   │   │   │   │   └── voice_remote_datasource.dart
+│   │   │   │   ├── 📁 models/
+│   │   │   │   │   └── voice_record_model.dart
+│   │   │   │   └── 📁 repositories/
+│   │   │   │       └── voice_repository_impl.dart
+│   │   │   ├── 📁 domain/
+│   │   │   │   ├── 📁 entities/
+│   │   │   │   │   └── voice_record.dart
+│   │   │   │   ├── 📁 repositories/
+│   │   │   │   │   └── voice_repository.dart
+│   │   │   │   └── 📁 usecases/
+│   │   │   │       ├── start_recording_usecase.dart
+│   │   │   │       ├── stop_recording_usecase.dart
+│   │   │   │       └── transcribe_audio_usecase.dart
+│   │   │   └── 📁 presentation/
+│   │   │       ├── 📁 bloc/
+│   │   │       │   ├── voice_recording_bloc.dart
+│   │   │       │   ├── voice_recording_event.dart
+│   │   │       │   └── voice_recording_state.dart
+│   │   │       ├── 📁 pages/
+│   │   │       │   └── voice_recording_page.dart
+│   │   │       └── 📁 widgets/
+│   │   │           ├── recording_button.dart
+│   │   │           ├── audio_visualizer.dart
+│   │   │           └── transcription_display.dart
+│   │   ├── 📁 nursing_records/
+│   │   │   ├── 📁 data/
+│   │   │   ├── 📁 domain/
+│   │   │   └── 📁 presentation/
+│   │   ├── 📁 handover/
+│   │   │   ├── 📁 data/
+│   │   │   ├── 📁 domain/
+│   │   │   └── 📁 presentation/
+│   │   └── 📁 chat/
+│   │       ├── 📁 data/
+│   │       ├── 📁 domain/
+│   │       └── 📁 presentation/
+│   ├── 📁 shared/
+│   │   ├── 📁 widgets/
+│   │   │   ├── custom_app_bar.dart
+│   │   │   ├── loading_widget.dart
+│   │   │   ├── error_widget.dart
+│   │   │   ├── patient_card.dart
+│   │   │   └── custom_button.dart
+│   │   ├── 📁 extensions/
+│   │   │   ├── context_extension.dart
+│   │   │   ├── string_extension.dart
+│   │   │   └── datetime_extension.dart
+│   │   └── 📁 mixins/
+│   │       ├── validation_mixin.dart
+│   │       └── loading_mixin.dart
+│   ├── 📄 app.dart
+│   └── 📄 injection_container.dart
+├── 📁 test/
+│   ├── 📁 unit/
+│   ├── 📁 widget/
+│   └── 📁 integration/
+└── 📁 ios/
+    └── 📁 android/
 
 
-## 📄 라이센스
-
-이 프로젝트는 [MIT 라이센스](LICENSE) 하에 있습니다.
 

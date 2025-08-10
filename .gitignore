@@ -117,3 +117,24 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+# 환경 변수 파일
+.env
+.env.local
+.env.production
+
+# IDE 설정
+.vscode/
+.idea/
+
+# 로그 파일
+*.log
+
+# 임시 파일
+*.tmp
+*.temp
+
+# 의료 데이터 관련 
+/data/
+/medical_records/
+*.medical

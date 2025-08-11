@@ -247,9 +247,14 @@ class _CustomButtonState extends State<CustomButton>
       button = _buildRegularButton(isDisabled);
     }
 
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: button,
+    return GestureDetector(
+      onTapDown: isDisabled ? null : _onTapDown,
+      onTapUp: isDisabled ? null : _onTapUp,
+      onTapCancel: isDisabled ? null : _onTapCancel,
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: button,
+      ),
     );
   }
 
@@ -259,9 +264,6 @@ class _CustomButtonState extends State<CustomButton>
       child: ElevatedButton(
         onPressed: isDisabled ? null : widget.onPressed,
         style: _buttonStyle,
-        onTapDown: isDisabled ? null : _onTapDown,
-        onTapUp: isDisabled ? null : _onTapUp,
-        onTapCancel: isDisabled ? null : _onTapCancel,
         child: widget.isLoading 
             ? _buildLoadingContent()
             : _buildButtonContent(),
@@ -276,9 +278,6 @@ class _CustomButtonState extends State<CustomButton>
       child: ElevatedButton(
         onPressed: isDisabled ? null : widget.onPressed,
         style: _buttonStyle,
-        onTapDown: isDisabled ? null : _onTapDown,
-        onTapUp: isDisabled ? null : _onTapUp,
-        onTapCancel: isDisabled ? null : _onTapCancel,
         child: widget.isLoading 
             ? _buildLoadingContent()
             : _buildFabContent(),

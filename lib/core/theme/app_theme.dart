@@ -112,7 +112,7 @@ class AppTheme {
     ),
 
     // ✅ Card Theme (React의 patient-card와 동일)
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.surface,
       elevation: 2,
       shadowColor: AppColors.shadowLight,
@@ -145,7 +145,7 @@ class AppTheme {
     ),
 
     // ✅ Dialog Theme
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: AppDecorations.radiusMedium,
@@ -188,7 +188,8 @@ class AppTheme {
     // ✅ Progress Indicator Theme
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primary,
-      backgroundColor: AppColors.surfaceVariant,
+      linearTrackColor: AppColors.surfaceVariant,
+      circularTrackColor: AppColors.surfaceVariant,
     ),
 
     // ✅ Scaffold Background

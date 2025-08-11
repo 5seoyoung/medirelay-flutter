@@ -1,5 +1,7 @@
 // lib/main.dart - 2단계: 페이지 네비게이션 추가
 import 'package:flutter/material.dart';
+import 'core/theme/app_theme.dart';
+import 'features/auth/presentation/pages/landing_page.dart';
 
 void main() {
   runApp(const MediRelayApp());

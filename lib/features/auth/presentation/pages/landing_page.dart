@@ -3,6 +3,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../shared/widgets/custom_button.dart';
+import 'login_page.dart';
 
 /// MediRelay 랜딩 페이지
 /// React 버전의 디자인을 Flutter로 완전 구현
@@ -80,6 +81,55 @@ class _LandingPageState extends State<LandingPage>
     _fadeController.dispose();
     _slideController.dispose();
     super.dispose();
+  }
+
+  // ✅ 이벤트 핸들러들
+  void _navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
+  }
+
+  void _navigateToPatients() {
+    // TODO: 환자 목록 페이지로 네비게이션 (임시 메시지)
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('🏥 환자 목록 페이지로 이동 (구현 예정)'),
+        backgroundColor: AppColors.success,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _handleLogout() {
+    setState(() {
+      _isLoggedIn = false;
+      _currentUser = null;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('👋 로그아웃 되었습니다'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  // ✅ 테스트용 로그인 상태 토글
+  void _toggleLoginStatus() {
+    setState(() {
+      _isLoggedIn = !_isLoggedIn;
+      if (_isLoggedIn) {
+        _currentUser = {
+          'name': '김간호사',
+          'department': '내과 병동',
+          'position': '간호사',
+        };
+      } else {
+        _currentUser = null;
+      }
+    });
   }
 
   @override
@@ -450,56 +500,6 @@ class _LandingPageState extends State<LandingPage>
       ),
       textAlign: TextAlign.center,
     );
-  }
-
-  // ✅ 이벤트 핸들러들
-  void _navigateToLogin() {
-    // TODO: 로그인 페이지로 네비게이션
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('🔑 로그인 페이지로 이동 (구현 예정)'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _navigateToPatients() {
-    // TODO: 환자 목록 페이지로 네비게이션
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('🏥 환자 목록 페이지로 이동 (구현 예정)'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _handleLogout() {
-    setState(() {
-      _isLoggedIn = false;
-      _currentUser = null;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('👋 로그아웃 되었습니다'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  // ✅ 테스트용 로그인 상태 토글
-  void _toggleLoginStatus() {
-    setState(() {
-      _isLoggedIn = !_isLoggedIn;
-      if (_isLoggedIn) {
-        _currentUser = {
-          'name': '김간호사',
-          'department': '내과 병동',
-          'position': '간호사',
-        };
-      } else {
-        _currentUser = null;
-      }
-    });
   }
 }
 

@@ -33,6 +33,7 @@ class _PatientListPageState extends State<PatientListPage> {
   String searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
+  // 샘플 환자 데이터
   final List<Patient> allPatients = [
     Patient(
       id: '1',
@@ -67,7 +68,9 @@ class _PatientListPageState extends State<PatientListPage> {
   ];
 
   List<Patient> get filteredPatients {
-    if (searchQuery.isEmpty) return allPatients;
+    if (searchQuery.isEmpty) {
+      return allPatients;
+    }
     return allPatients
         .where((patient) =>
             patient.name.contains(searchQuery) ||
@@ -103,12 +106,6 @@ class _PatientListPageState extends State<PatientListPage> {
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
@@ -126,7 +123,9 @@ class _PatientListPageState extends State<PatientListPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined, color: Color(0xFF4A90E2)),
-            onPressed: () {},
+            onPressed: () {
+              // 알림 기능 구현 예정
+            },
           ),
           IconButton(
             icon: const Icon(Icons.logout, color: Color(0xFF7F8C8D)),
@@ -353,7 +352,7 @@ class _PatientListPageState extends State<PatientListPage> {
 
             const SizedBox(height: 12),
 
-            // 액션 버튼들 (3개로 확장)
+            // 액션 버튼들
             Column(
               children: [
                 Row(
@@ -361,6 +360,7 @@ class _PatientListPageState extends State<PatientListPage> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
+                          // 간호기록지로 이동 (임시)
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -388,6 +388,7 @@ class _PatientListPageState extends State<PatientListPage> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () {
+                          // 음성 차팅으로 이동 (임시)
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -413,33 +414,62 @@ class _PatientListPageState extends State<PatientListPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                // 인계장 버튼
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/handover/${patient.id}',
-                        arguments: {
-                          'patientId': patient.id,
-                          'patientName': patient.name,
-                          'room': patient.room,
-                          'diagnosis': patient.diagnosis,
+                Row(
+                  children: [
+                    // 인계장 버튼
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/handover/${patient.id}',
+                            arguments: {
+                              'patientName': patient.name,
+                              'room': patient.room,
+                              'diagnosis': patient.diagnosis,
+                            },
+                          );
                         },
-                      );
-                    },
-                    icon: const Icon(Icons.swap_horiz, size: 18),
-                    label: const Text('인계장'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF27AE60),
-                      side: const BorderSide(color: Color(0xFF27AE60)),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        icon: const Icon(Icons.swap_horiz, size: 18),
+                        label: const Text('인계장'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF27AE60),
+                          side: const BorderSide(color: Color(0xFF27AE60)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    // AI 챗봇 버튼
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/chatbot/${patient.id}',
+                            arguments: {
+                              'patientName': patient.name,
+                              'room': patient.room,
+                              'diagnosis': patient.diagnosis,
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.chat, size: 18),
+                        label: const Text('AI 질의응답'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF9B59B6),
+                          side: const BorderSide(color: Color(0xFF9B59B6)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

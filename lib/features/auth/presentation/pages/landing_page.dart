@@ -4,6 +4,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import 'login_page.dart';
+import '../../../patient/presentation/pages/patient_list_page.dart';
 
 /// MediRelay 랜딩 페이지
 /// React 버전의 디자인을 Flutter로 완전 구현
@@ -93,12 +94,9 @@ class _LandingPageState extends State<LandingPage>
   }
 
   void _navigateToPatients() {
-    // TODO: 환자 목록 페이지로 네비게이션 (임시 메시지)
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('🏥 환자 목록 페이지로 이동 (구현 예정)'),
-        backgroundColor: AppColors.success,
-        duration: Duration(seconds: 2),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const PatientListPage(),
       ),
     );
   }

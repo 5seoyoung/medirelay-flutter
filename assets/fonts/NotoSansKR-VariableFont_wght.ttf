@@ -1,0 +1,7 @@
+flutter pub get
+
+Theme 적용(예: app_theme.dart)
+theme: ThemeData(
+useMaterial3: true,
+fontFamily: 'NotoSansKR',
+)

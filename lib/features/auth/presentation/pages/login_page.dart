@@ -5,7 +5,7 @@ import '../../../../core/theme/app_decorations.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import '../widgets/demo_account_selector.dart';
 import '../../domain/entities/demo_account.dart';
-import '../../../patients/presentation/pages/patients_page.dart';
+import '../../../patient/presentation/pages/patient_list_page.dart';
 
 /// MediRelay 로그인 페이지
 /// React 버전의 로그인 페이지를 Flutter로 완전 구현
@@ -522,7 +522,7 @@ class _LoginPageState extends State<LoginPage>
   void _navigateToPatients() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const PatientsPage(),
+        builder: (context) => const PatientListPage(),
       ),
     );
   }

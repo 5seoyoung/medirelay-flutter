@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
-import '../../core/theme/app_decorations.dart';
-import 'custom_button.dart';
+import 'package:medirelay_flutter/core/theme/app_colors.dart';
+import 'package:medirelay_flutter/core/theme/app_text_styles.dart';
+import 'package:medirelay_flutter/core/theme/app_decorations.dart';
+import 'package:medirelay_flutter/shared/widgets/custom_button.dart';
 
 /// 환자 카드 위젯
 /// React 버전의 patient-card 클래스를 Flutter로 완전 구현

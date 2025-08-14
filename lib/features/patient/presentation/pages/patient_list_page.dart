@@ -33,7 +33,6 @@ class _PatientListPageState extends State<PatientListPage> {
   String searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  // 샘플 환자 데이터
   final List<Patient> allPatients = [
     Patient(
       id: '1',
@@ -68,9 +67,7 @@ class _PatientListPageState extends State<PatientListPage> {
   ];
 
   List<Patient> get filteredPatients {
-    if (searchQuery.isEmpty) {
-      return allPatients;
-    }
+    if (searchQuery.isEmpty) return allPatients;
     return allPatients
         .where((patient) =>
             patient.name.contains(searchQuery) ||
@@ -106,6 +103,12 @@ class _PatientListPageState extends State<PatientListPage> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
@@ -123,9 +126,7 @@ class _PatientListPageState extends State<PatientListPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined, color: Color(0xFF4A90E2)),
-            onPressed: () {
-              // 알림 기능 구현 예정
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.logout, color: Color(0xFF7F8C8D)),
@@ -352,56 +353,87 @@ class _PatientListPageState extends State<PatientListPage> {
 
             const SizedBox(height: 12),
 
-            // 액션 버튼들
-            Row(
+            // 액션 버튼들 (3개로 확장)
+            Column(
               children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      // 간호기록지로 이동 (임시로 간단한 페이지)
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                            appBar: AppBar(title: Text('${patient.name} 간호기록지')),
-                            body: const Center(child: Text('간호기록지 페이지\n(구현 예정)')),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Scaffold(
+                                appBar: AppBar(title: Text('${patient.name} 간호기록지')),
+                                body: const Center(child: Text('간호기록지 페이지\n(구현 예정)')),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.description, size: 18),
+                        label: const Text('간호기록지'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4A90E2),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.description, size: 18),
-                    label: const Text('간호기록지'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A90E2),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      // 음성 차팅으로 이동 (임시로 간단한 페이지)
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                            appBar: AppBar(title: Text('${patient.name} 음성차팅')),
-                            body: const Center(child: Text('음성차팅 페이지\n(구현 예정)')),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Scaffold(
+                                appBar: AppBar(title: Text('${patient.name} 음성차팅')),
+                                body: const Center(child: Text('음성차팅 페이지\n(구현 예정)')),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.mic, size: 18),
+                        label: const Text('음성차팅'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF4A90E2),
+                          side: const BorderSide(color: Color(0xFF4A90E2)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // 인계장 버튼
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/handover/${patient.id}',
+                        arguments: {
+                          'patientId': patient.id,
+                          'patientName': patient.name,
+                          'room': patient.room,
+                          'diagnosis': patient.diagnosis,
+                        },
                       );
                     },
-                    icon: const Icon(Icons.mic, size: 18),
-                    label: const Text('음성차팅'),
+                    icon: const Icon(Icons.swap_horiz, size: 18),
+                    label: const Text('인계장'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF4A90E2),
-                      side: const BorderSide(color: Color(0xFF4A90E2)),
+                      foregroundColor: const Color(0xFF27AE60),
+                      side: const BorderSide(color: Color(0xFF27AE60)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

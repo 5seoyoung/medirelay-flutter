@@ -437,9 +437,16 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
           IconButton(
             icon: const Icon(Icons.add, color: Color(0xFF4A90E2)),
             onPressed: () {
-              // 새 기록 추가 (음성 차팅 페이지로 이동)
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('음성 차팅 페이지로 이동합니다')),
+              // 음성 차팅 페이지로 이동 (수정됨)
+              Navigator.pushNamed(
+                context,
+                '/voice-recording',
+                arguments: {
+                  'patientId': widget.patientId,
+                  'patientName': widget.patientName,
+                  'room': widget.room,
+                  'diagnosis': widget.diagnosis,
+                },
               );
             },
           ),
@@ -603,9 +610,16 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 음성 차팅 페이지로 이동
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('음성 차팅 기능으로 새 기록을 추가할 수 있습니다')),
+          // 음성 차팅 페이지로 이동 (수정됨)
+          Navigator.pushNamed(
+            context,
+            '/voice-recording',
+            arguments: {
+              'patientId': widget.patientId,
+              'patientName': widget.patientName,
+              'room': widget.room,
+              'diagnosis': widget.diagnosis,
+            },
           );
         },
         backgroundColor: const Color(0xFF4A90E2),

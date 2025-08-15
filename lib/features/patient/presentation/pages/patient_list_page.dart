@@ -360,15 +360,15 @@ class _PatientListPageState extends State<PatientListPage> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // 간호기록지로 이동 (임시)
-                          Navigator.push(
+                          // 간호기록지로 이동 (수정됨)
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text('${patient.name} 간호기록지')),
-                                body: const Center(child: Text('간호기록지 페이지\n(구현 예정)')),
-                              ),
-                            ),
+                            '/nursing-record/${patient.id}',
+                            arguments: {
+                              'patientName': patient.name,
+                              'room': patient.room,
+                              'diagnosis': patient.diagnosis,
+                            },
                           );
                         },
                         icon: const Icon(Icons.description, size: 18),
@@ -388,15 +388,16 @@ class _PatientListPageState extends State<PatientListPage> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          // 음성 차팅으로 이동 (임시)
-                          Navigator.push(
+                          // 음성차팅으로 이동 (수정됨)
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text('${patient.name} 음성차팅')),
-                                body: const Center(child: Text('음성차팅 페이지\n(구현 예정)')),
-                              ),
-                            ),
+                            '/voice-recording',
+                            arguments: {
+                              'patientId': patient.id,
+                              'patientName': patient.name,
+                              'room': patient.room,
+                              'diagnosis': patient.diagnosis,
+                            },
                           );
                         },
                         icon: const Icon(Icons.mic, size: 18),

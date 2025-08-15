@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// 간호기록 모델
+// 간호기록 모델 (기존 nursing_record_model.dart와 통합)
 class NursingRecord {
   final String id;
+  final String patientId;
   final String category;
   final String content;
   final String priority;
@@ -12,9 +13,11 @@ class NursingRecord {
   final String? actionTaken;
   final String? patientResponse;
   final String? followUpNeeded;
+  final String nurseName;
 
   NursingRecord({
     required this.id,
+    required this.patientId,
     required this.category,
     required this.content,
     required this.priority,
@@ -23,6 +26,7 @@ class NursingRecord {
     this.actionTaken,
     this.patientResponse,
     this.followUpNeeded,
+    required this.nurseName,
   });
 }
 
@@ -48,50 +52,98 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
   String selectedCategory = 'all';
   final List<String> categories = ['all', 'V/S', 'I/O', '투약', '관찰', '처치', '교육', '기타'];
   
-  // 샘플 데이터 - 실제로는 API에서 가져올 예정
-  final List<NursingRecord> sampleRecords = [
-    NursingRecord(
-      id: '1',
-      category: 'V/S',
-      content: '혈압 120/80, 맥박 72회/분, 체온 36.5℃ 측정. 정상 범위 내 안정적 유지.',
-      priority: '보통',
-      timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
-      keyFindings: '활력징후 안정',
-      actionTaken: '지속 모니터링',
-    ),
-    NursingRecord(
-      id: '2',
-      category: 'I/O',
-      content: '수액 500ml 투여 완료, 소변량 300ml 배출. 수분 균형 양호.',
-      priority: '낮음',
-      timestamp: DateTime.now().subtract(const Duration(hours: 1)),
-      keyFindings: '수분 균형 정상',
-    ),
-    NursingRecord(
-      id: '3',
-      category: '투약',
-      content: '진통제 투여 후 환자가 통증 완화되었다고 표현함.',
-      priority: '높음',
-      timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-      keyFindings: '통증 완화 효과적',
-      patientResponse: '통증이 많이 줄었어요',
-      followUpNeeded: '4시간 후 통증 재평가 필요',
-    ),
-    NursingRecord(
-      id: '4',
-      category: '관찰',
-      content: '환자 수면 패턴 개선, 야간 각성 횟수 감소.',
-      priority: '보통',
-      timestamp: DateTime.now().subtract(const Duration(hours: 4)),
-      keyFindings: '수면의 질 향상',
-    ),
-  ];
+  // 샘플 간호기록 데이터 (실제로는 API나 로컬 DB에서 가져올 예정)
+  late List<NursingRecord> allRecords;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNursingRecords();
+  }
+
+  void _loadNursingRecords() {
+    // 샘플 데이터 생성
+    allRecords = [
+      NursingRecord(
+        id: '1',
+        patientId: widget.patientId,
+        category: 'V/S',
+        content: '혈압 120/80mmHg, 맥박 72회/분, 호흡 18회/분, 체온 36.5℃',
+        priority: '보통',
+        timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
+        keyFindings: '활력징후 정상 범위 유지',
+        actionTaken: '지속적인 모니터링 실시',
+        nurseName: '김간호사',
+      ),
+      NursingRecord(
+        id: '2',
+        patientId: widget.patientId,
+        category: '투약',
+        content: '진통제 (타이레놀 500mg) 경구 투여',
+        priority: '높음',
+        timestamp: DateTime.now().subtract(const Duration(hours: 1)),
+        keyFindings: '투약 후 통증 완화 효과',
+        actionTaken: '진통제 투여',
+        patientResponse: '통증이 8점에서 4점으로 감소됨',
+        followUpNeeded: '4시간 후 통증 재평가 필요',
+        nurseName: '김간호사',
+      ),
+      NursingRecord(
+        id: '3',
+        patientId: widget.patientId,
+        category: 'I/O',
+        content: '수액 500ml 투여 완료, 소변량 300ml',
+        priority: '보통',
+        timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+        keyFindings: '수분 균형 양호',
+        actionTaken: '수액 투여 및 배뇨량 측정',
+        nurseName: '이간호사',
+      ),
+      NursingRecord(
+        id: '4',
+        patientId: widget.patientId,
+        category: '관찰',
+        content: '수술 부위 드레싱 상태 확인, 삼출물 없음',
+        priority: '높음',
+        timestamp: DateTime.now().subtract(const Duration(hours: 3)),
+        keyFindings: '수술 부위 치유 양호',
+        actionTaken: '드레싱 상태 점검',
+        nurseName: '박간호사',
+      ),
+      NursingRecord(
+        id: '5',
+        patientId: widget.patientId,
+        category: '교육',
+        content: '퇴원 후 약물 복용법 및 생활 수칙 교육',
+        priority: '보통',
+        timestamp: DateTime.now().subtract(const Duration(hours: 4)),
+        keyFindings: '환자 이해도 양호',
+        actionTaken: '퇴원 교육 실시',
+        patientResponse: '교육 내용 이해했다고 표현',
+        nurseName: '최간호사',
+      ),
+      NursingRecord(
+        id: '6',
+        patientId: widget.patientId,
+        category: '처치',
+        content: '정맥 카테터 교체 및 삽입 부위 소독',
+        priority: '높음',
+        timestamp: DateTime.now().subtract(const Duration(hours: 6)),
+        keyFindings: '카테터 삽입 성공, 감염 징후 없음',
+        actionTaken: 'IV 카테터 교체',
+        nurseName: '정간호사',
+      ),
+    ];
+  }
 
   List<NursingRecord> get filteredRecords {
-    if (selectedCategory == 'all') {
-      return sampleRecords;
-    }
-    return sampleRecords.where((record) => record.category == selectedCategory).toList();
+    List<NursingRecord> filtered = selectedCategory == 'all' 
+        ? allRecords 
+        : allRecords.where((record) => record.category == selectedCategory).toList();
+    
+    // 최신순으로 정렬
+    filtered.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    return filtered;
   }
 
   Color getCategoryColor(String category) {
@@ -144,7 +196,210 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
   }
 
   String formatDate(DateTime dateTime) {
-    return DateFormat('MM/dd').format(dateTime);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final recordDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+    
+    if (recordDate == today) {
+      return '오늘 ${formatTime(dateTime)}';
+    } else if (recordDate == today.subtract(const Duration(days: 1))) {
+      return '어제 ${formatTime(dateTime)}';
+    } else {
+      return DateFormat('MM/dd HH:mm').format(dateTime);
+    }
+  }
+
+  void _showRecordDetails(NursingRecord record) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        maxChildSize: 0.9,
+        minChildSize: 0.5,
+        builder: (context, scrollController) => Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 핸들바
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // 헤더
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: getCategoryColor(record.category),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      record.category,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    formatDate(record.timestamp),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF7F8C8D),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Text(
+                        getPriorityIcon(record.priority),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(width: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: getPriorityColor(record.priority).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          record.priority,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: getPriorityColor(record.priority),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // 상세 내용
+              Expanded(
+                child: ListView(
+                  controller: scrollController,
+                  children: [
+                    _buildDetailSection('기록 내용', record.content, Icons.description),
+                    
+                    if (record.keyFindings != null)
+                      _buildDetailSection('주요 발견사항', record.keyFindings!, Icons.search),
+                    
+                    if (record.actionTaken != null)
+                      _buildDetailSection('수행한 간호행위', record.actionTaken!, Icons.medical_services),
+                    
+                    if (record.patientResponse != null)
+                      _buildDetailSection('환자 반응', record.patientResponse!, Icons.record_voice_over),
+                    
+                    if (record.followUpNeeded != null)
+                      _buildDetailSection('추가 관찰 필요', record.followUpNeeded!, Icons.flag, 
+                          isImportant: true),
+                    
+                    _buildDetailSection('작성자', record.nurseName, Icons.person),
+                  ],
+                ),
+              ),
+
+              // 액션 버튼들
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.edit),
+                      label: const Text('수정'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF4A90E2),
+                        side: const BorderSide(color: Color(0xFF4A90E2)),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close),
+                      label: const Text('닫기'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4A90E2),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailSection(String title, String content, IconData icon, {bool isImportant = false}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isImportant ? const Color(0xFFFFF3E0) : const Color(0xFFF8F9FA),
+        borderRadius: BorderRadius.circular(12),
+        border: isImportant ? Border.all(color: const Color(0xFFFF9800)) : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                icon, 
+                size: 18, 
+                color: isImportant ? const Color(0xFFFF9800) : const Color(0xFF4A90E2)
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isImportant ? const Color(0xFFFF9800) : const Color(0xFF4A90E2),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            content,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF2C3E50),
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -158,23 +413,40 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
           icon: const Icon(Icons.arrow_back, color: Color(0xFF2C3E50)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          '간호기록지',
-          style: TextStyle(
-            color: Color(0xFF2C3E50),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${widget.patientName} - 간호기록지',
+              style: const TextStyle(
+                color: Color(0xFF2C3E50),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              '${widget.room} • ${filteredRecords.length}개 기록',
+              style: const TextStyle(
+                color: Color(0xFF7F8C8D),
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add, color: Color(0xFF4A90E2)),
             onPressed: () {
-              // 음성 차팅 페이지로 이동
+              // 음성 차팅 페이지로 이동 (수정됨)
               Navigator.pushNamed(
-                context, 
+                context,
                 '/voice-recording',
-                arguments: {'patientId': widget.patientId}
+                arguments: {
+                  'patientId': widget.patientId,
+                  'patientName': widget.patientName,
+                  'room': widget.room,
+                  'diagnosis': widget.diagnosis,
+                },
               );
             },
           ),
@@ -308,7 +580,7 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          '아직 간호기록이 없습니다',
+                          '해당 카테고리의 간호기록이 없습니다',
                           style: TextStyle(
                             fontSize: 16,
                             color: Color(0xFF7F8C8D),
@@ -316,7 +588,7 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          '+ 버튼을 눌러 음성 차팅을 시작하세요',
+                          '+ 버튼을 눌러 새 기록을 추가하세요',
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFFBDC3C7),
@@ -338,10 +610,16 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // 음성 차팅 페이지로 이동 (수정됨)
           Navigator.pushNamed(
-            context, 
+            context,
             '/voice-recording',
-            arguments: {'patientId': widget.patientId}
+            arguments: {
+              'patientId': widget.patientId,
+              'patientName': widget.patientName,
+              'room': widget.room,
+              'diagnosis': widget.diagnosis,
+            },
           );
         },
         backgroundColor: const Color(0xFF4A90E2),
@@ -351,139 +629,160 @@ class _NursingRecordPageState extends State<NursingRecordPage> {
   }
 
   Widget _buildRecordCard(NursingRecord record) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 헤더 (카테고리, 시간, 우선순위)
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: getCategoryColor(record.category),
-                    borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: () => _showRecordDetails(record),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 헤더 (카테고리, 시간, 우선순위)
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: getCategoryColor(record.category),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      record.category,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    record.category,
+                  const SizedBox(width: 8),
+                  Text(
+                    formatDate(record.timestamp),
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 14,
+                      color: Color(0xFF7F8C8D),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  formatTime(record.timestamp),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF7F8C8D),
-                    fontWeight: FontWeight.w500,
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Text(
+                        getPriorityIcon(record.priority),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(width: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: getPriorityColor(record.priority).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          record.priority,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: getPriorityColor(record.priority),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // 기록 내용 (요약)
+              Text(
+                record.content,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Color(0xFF2C3E50),
+                  height: 1.4,
                 ),
-                const Spacer(),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+
+              // 추가 정보 표시 (있는 경우)
+              if (record.keyFindings != null || record.followUpNeeded != null) ...[
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Text(
-                      getPriorityIcon(record.priority),
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: getPriorityColor(record.priority).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        record.priority,
+                    if (record.keyFindings != null) ...[
+                      const Icon(Icons.search, size: 14, color: Color(0xFF4A90E2)),
+                      const SizedBox(width: 4),
+                      const Text(
+                        '주요발견',
                         style: TextStyle(
                           fontSize: 12,
-                          color: getPriorityColor(record.priority),
+                          color: Color(0xFF4A90E2),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
+                    ],
+                    if (record.keyFindings != null && record.followUpNeeded != null)
+                      const SizedBox(width: 12),
+                    if (record.followUpNeeded != null) ...[
+                      const Icon(Icons.flag, size: 14, color: Color(0xFFFF9800)),
+                      const SizedBox(width: 4),
+                      const Text(
+                        '추가관찰',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFFFF9800),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ],
-            ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
-            // 기록 내용
-            Text(
-              record.content,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Color(0xFF2C3E50),
-                height: 1.5,
+              // 작성자 정보
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.person, size: 14, color: Color(0xFF95A5A6)),
+                      const SizedBox(width: 4),
+                      Text(
+                        record.nurseName,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF95A5A6),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 12,
+                    color: Color(0xFFBDC3C7),
+                  ),
+                ],
               ),
-            ),
-
-            // 추가 정보들 (있는 경우에만 표시)
-            if (record.keyFindings != null) ...[
-              const SizedBox(height: 12),
-              _buildInfoSection('주요 발견사항', record.keyFindings!, const Color(0xFF3498DB)),
             ],
-
-            if (record.actionTaken != null) ...[
-              const SizedBox(height: 8),
-              _buildInfoSection('수행한 간호행위', record.actionTaken!, const Color(0xFF27AE60)),
-            ],
-
-            if (record.patientResponse != null) ...[
-              const SizedBox(height: 8),
-              _buildInfoSection('환자 반응', record.patientResponse!, const Color(0xFF8E44AD)),
-            ],
-
-            if (record.followUpNeeded != null) ...[
-              const SizedBox(height: 8),
-              _buildInfoSection('추가 관찰 필요', record.followUpNeeded!, const Color(0xFFE74C3C)),
-            ],
-          ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildInfoSection(String title, String content, Color color) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$title:',
-          style: TextStyle(
-            fontSize: 13,
-            color: color,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          content,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Color(0xFF555555),
-            height: 1.4,
-          ),
-        ),
-      ],
     );
   }
 }

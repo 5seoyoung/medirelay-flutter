@@ -360,15 +360,14 @@ class _PatientListPageState extends State<PatientListPage> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // 간호기록지로 이동 (임시)
-                          Navigator.push(
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text('${patient.name} 간호기록지')),
-                                body: const Center(child: Text('간호기록지 페이지\n(구현 예정)')),
-                              ),
-                            ),
+                            '/nursing-record/${patient.id}',
+                            arguments: {
+                              'patientName': patient.name,
+                              'room': patient.room,
+                              'diagnosis': patient.diagnosis,
+                            },
                           );
                         },
                         icon: const Icon(Icons.description, size: 18),

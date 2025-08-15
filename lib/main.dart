@@ -5,6 +5,7 @@ import 'features/auth/presentation/pages/login_page.dart';
 import 'features/patient/presentation/pages/patient_list_page.dart';
 import 'features/handover/presentation/pages/handover_page.dart';
 import 'features/chatbot/presentation/pages/chatbot_page.dart';
+import 'features/nursing_record/presentation/pages/nursing_record_page.dart';  // 🔥 이 줄 추가!
 
 void main() {
   runApp(const MediRelayApp());
@@ -55,7 +56,21 @@ class MediRelayApp extends StatelessWidget {
             ),
           );
         }
-        
+        // 간호기록지 페이지 라우팅
+        if (settings.name!.startsWith('/nursing-record/')) {
+          final patientId = settings.name!.split('/')[2];
+          final args = settings.arguments as Map<String, dynamic>?;
+          
+          return MaterialPageRoute(
+            builder: (context) => NursingRecordPage(
+              patientId: patientId,
+              patientName: args?['patientName'] ?? '환자',
+              room: args?['room'] ?? '병실',
+              diagnosis: args?['diagnosis'] ?? '진단명',
+            ),
+          );
+        }
+
         return null;
       },
     );

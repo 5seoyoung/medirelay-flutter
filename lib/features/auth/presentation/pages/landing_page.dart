@@ -434,7 +434,7 @@ class _LandingPageState extends State<LandingPage>
           child: Opacity(
             opacity: value,
             child: CustomButton(
-              text: _isLoggedIn ? '🏥 업무 시작하기' : '🚀 로그인하기',
+              text: _isLoggedIn ? '업무 시작하기' : '로그인하기',
               onPressed: _isLoggedIn ? _navigateToPatients : _navigateToLogin,
               type: CustomButtonType.primary,
               size: CustomButtonSize.large,

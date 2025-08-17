@@ -1,0 +1,12 @@
+
+# Backend specific
+backend/.env
+backend/logs/
+backend/uploads/
+backend/__pycache__/
+backend/.pytest_cache/
+backend/test.db
+backend/venv/
+backend/.venv/
+backend/*.log
+

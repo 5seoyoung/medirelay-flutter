@@ -1,5 +1,3 @@
-
-# Backend specific
 backend/.env
 backend/logs/
 backend/uploads/
@@ -9,4 +7,3 @@ backend/test.db
 backend/venv/
 backend/.venv/
 backend/*.log
-
